@@ -87,9 +87,10 @@ the north-east room of the apartment.
 1. The state space is the set of all possible positions in the apartment. The action space is the set of all possible
     movements (north or east). The cumulative cost function is the sum of the costs of the movements.
     S = { (i, j) ∶ 1≤i≤M, 1≤j≤N }
-    A = { north, east } (note that when by the wall, only one action is available: { north } or { east } or { none } if by the corner)
-    R(mouse_path) = ∑ t = 1 to T C(s_t, a_t) + R(s_T) where C(s_t, a_t) is the cost of moving from state s_t to state s_t+1
-    and R(s_T) is the reward of reaching state s_T (1 if there's cheese, 0 otherwise).
+    A = { north, east } (note that when by the wall, only one action is available: { north } or { east } or { none } if
+    by the corner).
+    R(path) = (∑(t = 0 to T-1): C_t(s_t, a_t)) + C_T(s_T) where C_t(s_t, a_t) is the cost of moving from state s_t to
+    state s_{t+1} and C_T(s_T) is the cost of reaching the north-east room.
     
 2. The horizon of the problem is the number of steps needed to reach the north-east room from the south-west room,
     which is M + N - 2 (M-1 steps to the north and N-1 steps to the east).
