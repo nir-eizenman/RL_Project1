@@ -1,8 +1,8 @@
-import gym
-import torch
+# import gym
+# import torch
 
-print(torch.__version__)
-print(gym.__version__)
+# print(torch.__version__)
+# print(gym.__version__)
 
 # Question 1 (Longest Common Subsequence)
 """
@@ -122,3 +122,57 @@ the north-east room of the apartment.
      The number of actions is 2^K (similar to the binary representation of the actions, where 0 means north and
      1 means east). And again, some actions might not be available if the mice are by the wall or corner.
 """
+
+#question 3
+# Transition probabilities matrix
+transition_matrix = {
+    'B': {'B': 0.1, 'K': 0.325, 'O': 0.25, '-': 0.325},
+    'K': {'B': 0.4, 'K': 0.0,   'O': 0.4,  '-': 0.2},
+    'O': {'B': 0.2, 'K': 0.2,   'O': 0.2,  '-': 0.4},
+    '-': {'B': 1.0, 'K': 0.0,   'O': 0.0,  '-': 0.0}
+}
+
+# List of states (symbols)
+states = ['B', 'K', 'O']
+
+# Initial probabilities for the first position
+initial_probabilities = {('B', 1): 1, ('K', 1): 0, ('O', 1): 0}
+previous_max_states = {}
+
+def find_most_probable_sequence(length):
+    # Iterate over each position in the sequence
+    for position in range(2, length + 1):
+        for current_state in states:
+            # Find the state with the highest probability leading to the current state
+            best_previous_state = None
+            max_probability = 0
+            for previous_state in states:
+                transition_probability = initial_probabilities[(previous_state, position - 1)] * transition_matrix[previous_state][current_state]
+                if transition_probability > max_probability:
+                    max_probability = transition_probability
+                    best_previous_state = previous_state
+            previous_max_states[(current_state, position)] = best_previous_state
+            initial_probabilities[(current_state, position)] = max_probability
+
+    # Determine the last state with the highest probability including the end transition
+    best_final_state = None
+    max_final_probability = 0
+    for state in states:
+        final_probability = initial_probabilities[(state, length)] * transition_matrix[state]['-']
+        if final_probability > max_final_probability:
+            max_final_probability = final_probability
+            best_final_state = state
+
+    # Backtrack to construct the most probable sequence
+    sequence = best_final_state
+    for position in reversed(range(2, length + 1)):
+        best_final_state = previous_max_states[(best_final_state, position)]
+        sequence += best_final_state
+
+    # Return the probability and the sequence
+    return max_final_probability, sequence[::-1]
+
+print(find_most_probable_sequence(5))
+
+
+
