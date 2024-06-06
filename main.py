@@ -1,8 +1,8 @@
-# import gym
-# import torch
+import gym
+import torch
 
-# print(torch.__version__)
-# print(gym.__version__)
+print(torch.__version__)
+print(gym.__version__)
 
 # Question 1 (Longest Common Subsequence)
 """
